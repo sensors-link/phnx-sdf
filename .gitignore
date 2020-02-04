@@ -1,0 +1,9 @@
+.vscode
+build
+arm-gcc9
+BuildTools
+riscv-gcc8
+qemu
+GPATH
+GTAGS
+GRTAGS

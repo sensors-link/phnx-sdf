@@ -1,0 +1,37 @@
+{
+    "name": "phoenix",
+    "title": "FanhaiData PHOENIX",
+    "version": "1.0.0",
+    "keywords": "risc-v, phoenix, fanhai-data, sensors-link",
+    "description": "The FanhaiData PHOENIX device is a 32-bit general-purpose microcontroller based on the RISC-V core with an impressive balance of processing power, reduced power consumption and peripheral set.",
+    "url": "https://www.sensors.link/products/microcontrollers/phoenix/",
+    "homepage": "http://platformio.org/platforms/phoenix",
+    "license": "Apache-2.0",
+    "engines": {
+        "platformio": "<5"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/sensors-link/platform-phoenix.git"
+    },
+    "authors": [{
+        "name": "FanhaiData",
+        "email": "support@sensors.link",
+        "url": "https://www.sensors.link"
+    }],
+    "packageRepositories": [
+        "https://dl.bintray.com/platformio/dl-packages/manifest.json",
+        "http://dl.platformio.org/packages/manifest.json"
+    ],
+    "frameworks": {
+        "phnx02": {
+            "script": "builder/frameworks/phnx02.py"
+        },
+        "phnx03": {
+            "script": "builder/frameworks/phnx03.py"
+        }
+    },
+    "packages": {      
+    }
+
+}
