@@ -7,9 +7,10 @@
 #include "freertos/queue.h"
 #include "freertos/task.h"
 
-#include "platform.h"
-#include "clock.h"
-#include "uart.h"
+#include "gd32vf103.h"
+#include <stdio.h>
+#include <stdbool.h>
+
 
 #define mainQUEUE_RECEIVE_TASK_PRIORITY (tskIDLE_PRIORITY + 2)
 #define mainQUEUE_SEND_TASK_PRIORITY (tskIDLE_PRIORITY + 1)
@@ -52,7 +53,7 @@ static void prvQueueReceiveTask(void *pvParameters) {
   const unsigned long ulExpectedValue = 100UL;
   const char *const pcPassMessage = "Blink\r\n";
   const char *const pcFailMessage = "Unexpected value received\r\n";
-
+  static int blink = true;
   /* Remove compiler warning about unused parameter. */
   (void)pvParameters;
 
@@ -67,19 +68,56 @@ static void prvQueueReceiveTask(void *pvParameters) {
     if (ulReceivedValue == ulExpectedValue) {
       write(STDOUT_FILENO, pcPassMessage, strlen(pcPassMessage));
       ulReceivedValue = 0U;
+      
+      if ( blink ) {
+        GPIO_BOP(GPIOC) = GPIO_PIN_13;
+        blink = false;
+      } else {
+        GPIO_BC(GPIOC) = GPIO_PIN_13;
+        blink = true;
+      }
     } else {
       write(STDOUT_FILENO, pcFailMessage, strlen(pcFailMessage));
     }
   }
 }
-/*-----------------------------------------------------------*/
 
-int main(void) {
-  use_default_clocks();
-  use_pll(0, 0, 1, 31, 1);
-  uart_init(115200);
 
-  /* Create the queue. */
+extern void init_libc();
+extern void init_stdio();
+
+int main(void)
+{
+    init_libc();
+    init_stdio();
+    /* enable GPIO clock */
+    rcu_periph_clock_enable(RCU_GPIOA);
+    /* enable the led clock */
+    rcu_periph_clock_enable(RCU_GPIOC);
+    /* enable USART clock */
+    rcu_periph_clock_enable(RCU_USART0);
+
+    /* connect port to USARTx_Tx */
+    gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_9);
+    /* connect port to USARTx_Rx */
+    gpio_init(GPIOA, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, GPIO_PIN_10);
+    /* configure led GPIO port */ 
+    gpio_init(GPIOC, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_13); /* BUILTIN LED OF LONGAN BOARDS IS PIN PC13 */
+
+    /* USART configure */
+    usart_deinit(USART0);
+    usart_baudrate_set(USART0, 57600U); 
+    usart_word_length_set(USART0, USART_WL_8BIT);
+    usart_stop_bit_set(USART0, USART_STB_1BIT);
+    usart_parity_config(USART0, USART_PM_NONE);
+    usart_hardware_flow_rts_config(USART0, USART_RTS_DISABLE);
+    usart_hardware_flow_cts_config(USART0, USART_CTS_DISABLE);
+    usart_receive_config(USART0, USART_RECEIVE_ENABLE);
+    usart_transmit_config(USART0, USART_TRANSMIT_ENABLE);
+    usart_enable(USART0);
+
+    GPIO_BC(GPIOC) = GPIO_PIN_13;
+    /* Create the queue. */
   xQueue = xQueueCreate(mainQUEUE_LENGTH, sizeof(uint32_t));
 
   xTaskCreate(

@@ -70,7 +70,7 @@
 #ifndef FREERTOS_CONFIG_H
 #define FREERTOS_CONFIG_H
 
-#include "platform.h"
+#include "gd32vf103.h"
 
 /*
  * For some reason the standard demo timer demo/test tasks fail when executing
@@ -94,7 +94,7 @@
  * See http://www.freertos.org/a00110.html.
  *----------------------------------------------------------*/
 
-#define configCLINT_BASE_ADDRESS CLINT_CTRL_ADDR
+#define configCLINT_BASE_ADDRESS ECLIC_ADDR_BASE
 #define configUSE_PREEMPTION 1
 #define configUSE_IDLE_HOOK 0
 #define configUSE_TICK_HOOK 0         // 1
