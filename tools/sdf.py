@@ -347,7 +347,7 @@ def new_project(action, args):
 
     print()
     project_name = input("Input a name for the new project: ")
-    target = select("Target for the project : ", ["fdm32vs10x","stm32f10x","gd32vf10x"])
+    target = select("Target for the project : ", ["fdm32vs10x","gd32vf10x"])
     examples_dir = os.path.join(os.environ["PHNX_SDF"], "examples", target)
     if not os.path.isdir(examples_dir):
         print("target '%s' not found." % target)
