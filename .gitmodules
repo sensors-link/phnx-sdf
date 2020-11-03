@@ -1,0 +1,9 @@
+[submodule "phnx-sdk"]
+	path = phnx-sdk
+	url = git@github.com:sensors-link/phnx-sdk.git
+[submodule "components/fdm32vs10x"]
+	path = components/fdm32vs10x
+	url = git@github.com:sensors-link/phnx-sdk.git
+[submodule "examples/fdm32vs10x"]
+	path = examples/fdm32vs10x
+	url = git@github.com:sensors-link/phnx-examples.git
