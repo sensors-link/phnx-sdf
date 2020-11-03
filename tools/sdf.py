@@ -263,7 +263,7 @@ def monitor(action, args):
 
     if not args.baud is None:
         dotool_args += [args.port]
-        
+
     _run_tool("do.py", dotool_args, args.build_dir)
 
 
@@ -331,14 +331,43 @@ def fullclean(action, args):
         else:
             os.remove(f)
 
+def new_project(action, args):
+    def select(prompt, choices):
+        ret = ""
+        while ret == "":
+            print(prompt)
+            for i in range(len(choices)):
+                print("(%d) %s" % (i+1, choices[i]))
+            try:
+                choice = int(input("Input your choice : "))
+                ret = choices[choice-1]
+            except:
+                pass
+        return ret
+
+    print()
+    project_name = input("Input a name for the new project: ")
+    target = select("Target for the project : ", ["fdm32vs10x","stm32f10x","gd32vf10x"])
+    examples_dir = os.path.join(os.environ["PHNX_SDF"], "examples", target)
+    if not os.path.isdir(examples_dir):
+        print("target '%s' not found." % target)
+        return
+    examples = os.listdir(examples_dir)
+    if len(examples) == 0:
+        print("Examples directory '%s' is empty." % examples_dir)
+        return
+    template = select("Template for the project : ", examples)
+    template_dir = os.path.join(os.environ["PHNX_SDF"], "examples", target, template)
+    shutil.copytree(template_dir, os.path.join(".", project_name))
+    print("Project [%s] generated. Use VSCode to open [%s] subdirectory." % (project_name,project_name))
+    print("Or, use \"code %s\" command if VSCode correcttly set in your PATH." % (project_name))
 
 def print_closing_message(args):
     actions = str(args.actions)
-    if "flash" in actions or "debug" in actions or "monitor" in actions :
+    if "build" in actions and (not "flash" in actions):
+        print("\nBuild complete. To flash, run this command with 'flash' action.")
+    else :
         print("Done")
-        return
-
-    print("\nBuild complete. To flash, run this command with 'flash' action.")
 
 ACTIONS = {
     # action name : ( function (or alias), dependencies, order-only dependencies )
@@ -351,6 +380,7 @@ ACTIONS = {
     "flash":                 (flash,        ["all"], []),
     "debug":                 (gdbserver,    ["all"], []),
     "monitor":               (monitor,      [], ["flash"]),
+    "new":                   (new_project,  [], []),
 }
 
 
@@ -400,7 +430,7 @@ def main():
                         action="store_true")
     parser.add_argument('actions', help="Actions (build targets or other operations)", nargs='+',
                         choices=ACTIONS.keys())
-                        
+
     args = parser.parse_args()
 
     check_environment()
@@ -436,6 +466,7 @@ def main():
         completed_actions.add(action)
 
     actions = list(args.actions)
+
     while len(actions) > 0:
         execute_action(actions[0], actions[1:])
         actions.pop(0)
