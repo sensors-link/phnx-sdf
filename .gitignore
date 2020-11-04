@@ -1,11 +1,9 @@
 .vscode
 */__pycache__
-build
+*.exe
 BuildTools
-qemu
+riscv-gcc8
 GPATH
 GTAGS
 GRTAGS
-
-components/gd32vf10x
-examples/gd32vf10x
+*/gd32vf10x

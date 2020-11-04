@@ -345,20 +345,55 @@ def new_project(action, args):
                 pass
         return ret
 
+    def copyInFile(srcDir,dstDir,filename, target):
+        o = open(os.path.join(srcDir,filename + ".json.in"),'r',encoding='utf-8')
+        d = open(os.path.join(dstDir,filename + ".json"),'w',encoding='utf-8')
+        sdfDir = os.environ["PHNX_SDF"]
+        sdfDir = sdfDir.replace("\\","/")
+        # 循环读取旧文件
+        for line in o:
+            line = line.replace("@PHNX_SDF@", sdfDir)
+            line = line.replace("@TARGET@",target)
+            # line = line.replace("@CMAKE_C_COMPILER@",target)
+            # line = line.replace("@CMAKE_DEBUGGER@",target)
+            # line = line.replace("@CMAKE_BINARY_DIR@",target)
+            # line = line.replace("@@PROJECT_EXECUTABLE@",target)
+            d.write(line)
+        o.close()
+        d.close()
+
     print()
+    # 选择目标环境和项目模板
     project_name = input("Input a name for the new project: ")
     target = select("Target for the project : ", ["fdm32vs10x","gd32vf10x"])
     examples_dir = os.path.join(os.environ["PHNX_SDF"], "examples", target)
     if not os.path.isdir(examples_dir):
         print("target '%s' not found." % target)
         return
-    examples = os.listdir(examples_dir)
+    examples = []
+    for f in os.listdir(examples_dir):
+        if os.path.isdir(os.path.join(examples_dir, f)) and f[0] != '.' :
+            examples.append(f)
+
     if len(examples) == 0:
         print("Examples directory '%s' is empty." % examples_dir)
         return
     template = select("Template for the project : ", examples)
+
+    # 创建工程
     template_dir = os.path.join(os.environ["PHNX_SDF"], "examples", target, template)
     shutil.copytree(template_dir, os.path.join(".", project_name))
+
+    # 在新工程中创建.vscode目录
+    vscodeExtInDir = os.path.join(os.environ["PHNX_SDF"], "components", target, ".project", "vscode")
+    vscodeExtDir = os.path.join(".", project_name, ".vscode")
+    os.mkdir(vscodeExtDir)
+    copyInFile(vscodeExtInDir, vscodeExtDir, "tasks", target)
+    copyInFile(vscodeExtInDir, vscodeExtDir, "c_cpp_properties", target)
+    copyInFile(vscodeExtInDir, vscodeExtDir, "extensions", target)
+    copyInFile(vscodeExtInDir, vscodeExtDir, "launch", target)
+
+    # 完成
     print("Project [%s] generated. Use VSCode to open [%s] subdirectory." % (project_name,project_name))
     print("Or, use \"code %s\" command if VSCode correcttly set in your PATH." % (project_name))
 

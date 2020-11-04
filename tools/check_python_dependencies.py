@@ -31,7 +31,7 @@ def is_virtualenv():
 if __name__ == "__main__":
     PHNX_SDF = os.getenv("PHNX_SDF")
 
-    parser = argparse.ArgumentParser(description='ESP32 Python package dependency checker')
+    parser = argparse.ArgumentParser(description='PHNX-SDF Python package dependency checker')
     parser.add_argument('--requirements', '-r',
                         help='Path to the requrements file',
                         default=os.path.join(PHNX_SDF, 'tools','requirements.txt'))
