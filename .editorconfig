@@ -20,3 +20,7 @@ charset = latin1
 end_of_line = crlf
 charset = gb2312
 
+[BeforeInfo.txt, AfterInfo.txt]
+end_of_line = crlf
+charset = gb2312
+

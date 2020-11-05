@@ -1,1 +1,19 @@
-Before
+Phoenix SDF (Sensors Development Framwork) 是泛海数据Phoenix系列传感器SoC的开发框架。
+
+
+Phoenix SDF 安装依赖
+- Phoenix SDF需要Python3的支持，请先安装Python3.7以上版本。
+- Phoenix SDF提供对Microsoft Visual Studio Code的支持，请先安装Microsoft Visual Studio Code。
+- 使用Phoenix SDF需要编译工具链，用于编译MCU代码。Phoenix SoC基于 RISCV 内核，建议使用GCC for RISCV 工具链。
+
+Phoenix SDF 提供
+- 构建工具、调试和下载工具
+    - Phoenix SDF使用 CMake/GNUMake/Ninja 构建工具，用于构建 Phoenix 应用程序；
+    - 泛海数据提供基于开源OpenOCD二次开发的OpenOCD工具用于Phoenix 系列SoC的调试和下载
+- 传感器软件开发框架
+    - 该框架已经基本包含使用Phoenix 系列SoC开发传感器使用的 API（软件库和源代码）和运行工具链的脚本；
+
+安装完成后，您可以在下面两种开发环境中调用Phoenix SDF进行传感器开发
+- 命令行环境
+- Microsoft Visual Studio Code集成开发环境
+您也可以方便的将Phoenix SDF命令行环境集成到您喜欢的其他IDE。
