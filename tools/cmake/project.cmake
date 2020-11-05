@@ -74,13 +74,25 @@ macro(project name)
         endforeach()
     endforeach()
 
-
+    set(EXTRA_SRCS "${EXTRA_SRCS} ${COMPONENT_${elm}_EXTRA_SRCS}")
+    foreach(elm ${ALL_COMPONENTS_ADDED})
+        if(COMPONENT_${elm}_EXTRA_SRCS)
+            # set(EXTRA_SRCS "${EXTRA_SRCS} ${COMPONENT_${elm}_EXTRA_SRCS}")
+            list(APPEND EXTRA_SRCS ${COMPONENT_${elm}_EXTRA_SRCS} )
+        endif()
+    endforeach()
     # 设置工程主文件编译
 
     set(PROJECT_EXECUTABLE ${CMAKE_PROJECT_NAME}.elf)
 
     if(PROJECT_SRCS)
         spaces2list(PROJECT_SRCS)
+        foreach(elm ${ALL_COMPONENTS_ADDED})
+            if(COMPONENT_${elm}_EXTRA_SRCS)
+                # set(EXTRA_SRCS "${EXTRA_SRCS} ${COMPONENT_${elm}_EXTRA_SRCS}")
+                list(APPEND PROJECT_SRCS ${COMPONENT_${elm}_EXTRA_SRCS} )
+            endif()
+        endforeach()
         add_executable(${PROJECT_EXECUTABLE} ${PROJECT_SRCS})
     else()
         message(FATAL_ERROR "PROJECT_SRCS shall be set in CMakeList.txt")
