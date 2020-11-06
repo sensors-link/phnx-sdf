@@ -22,29 +22,21 @@ set(cflags_list
     "-fmessage-length=0"
     "-fsigned-char"
     "-fno-common"
-    "-O2"
 
     # Error & Warning
-    # "-Wall"
-    # "-Werror=all"
-    # "-Wno-error=unused-function"
-    # "-Wno-error=unused-but-set-variable"
-    # "-Wno-error=unused-variable"
-    # "-Wno-error=deprecated-declarations"
-    # "-Wextra"
-    # "-Wno-unused-parameter"
-    # "-Wno-sign-compare"
-
-    # Linker flags
-    # "-nostartfiles"
-    # # "--specs=nosys.specs"
-    # "--specs=nano.specs"
-    # "-Wl,--gc-sections"
-
+    "-Wall"
+    "-Werror=all"
+    "-Wno-error=unused-function"
+    "-Wno-error=unused-but-set-variable"
+    "-Wno-error=unused-variable"
+    "-Wno-error=deprecated-declarations"
+    "-Wextra"
+    "-Wno-unused-parameter"
+    "-Wno-sign-compare"
 )
 
 set(CPU_FLAGS "-march=rv32emac -mabi=ilp32e -mcmodel=medany -msmall-data-limit=8")
-set(CMAKE_C_FLAGS ${CPU_FLAGS})
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CPU_FLAGS}")
 
 foreach(elm ${cflags_list})
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${elm}")
@@ -55,3 +47,12 @@ endforeach()
 # )
 set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_C_FLAGS} -nostartfiles -Wl,--gc-sections --specs=nano.specs")
+
+set(CMAKE_C_FLAGS_RELEASE "-Os")
+set(CMAKE_C_FLAGS_DEBUG "-O2 -ggdb")
+
+if(CMAKE_BUILD_TYPE)
+    # set(CMAKE_BUILD_TYPE "Debug")
+else()
+    set(CMAKE_BUILD_TYPE "Debug")
+endif()

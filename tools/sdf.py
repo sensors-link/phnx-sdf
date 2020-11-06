@@ -247,6 +247,18 @@ def gdbserver(action, args):
     dotool_args += ["gdbserver", project_desc["app_elf"]]
     _run_tool("do.py", dotool_args, args.build_dir)
 
+def reset_target(action, args):
+    desc_path = os.path.join(args.build_dir, "project_description.json")
+    if not os.path.exists(desc_path):
+        _ensure_build_directory(args)
+    with open(desc_path, "r") as f:
+        project_desc = json.load(f)
+
+    dotool_path = os.path.join(os.environ["PHNX_SDF"], "components",project_desc["target"], "do.py")
+    dotool_args = [PYTHON, dotool_path]
+    dotool_args += ["softreset"]
+    _run_tool("do.py", dotool_args, args.build_dir)
+
 def monitor(action, args):
     desc_path = os.path.join(args.build_dir, "project_description.json")
     if not os.path.exists(desc_path):
@@ -366,32 +378,48 @@ def new_project(action, args):
     # 选择目标环境和项目模板
     project_name = input("Input a name for the new project: ")
     target = select("Target for the project : ", ["fdm32vs10x","gd32vf10x"])
-    examples_dir = os.path.join(os.environ["PHNX_SDF"], "examples", target)
-    if not os.path.isdir(examples_dir):
-        print("target '%s' not found." % target)
-        return
-    examples = []
-    for f in os.listdir(examples_dir):
-        if os.path.isdir(os.path.join(examples_dir, f)) and f[0] != '.' :
-            examples.append(f)
+    projectDir = os.path.join(".", project_name)
+    targetDir = os.path.join(os.environ["PHNX_SDF"], "components", target)
+    examplesDir = os.path.join(os.environ["PHNX_SDF"], "examples", target)
 
-    if len(examples) == 0:
-        print("Examples directory '%s' is empty." % examples_dir)
-        return
-    template = select("Template for the project : ", examples)
+    if os.path.isdir(projectDir):
+        answer = input("Subdirectory [%s] already exist, make it a SDF project?[Y/N]" % project_name)
+        if answer != "Y" and answer != "y": return
+    else:
+        examples = []
+        for root, dirs, files in os.walk(examplesDir, topdown=False):
+            if 'main.c' in files:
+                root[len(examplesDir):]
+                examples.append(root[len(examplesDir)+1:])
 
-    # 创建工程
-    template_dir = os.path.join(os.environ["PHNX_SDF"], "examples", target, template)
-    shutil.copytree(template_dir, os.path.join(".", project_name))
+        if len(examples) == 0:
+            print("Examples directory '%s' is empty." % examplesDir)
+            return
+        template = select("Template for the project : ", examples)
 
-    # 在新工程中创建.vscode目录
-    vscodeExtInDir = os.path.join(os.environ["PHNX_SDF"], "components", target, ".project", "vscode")
-    vscodeExtDir = os.path.join(".", project_name, ".vscode")
-    os.mkdir(vscodeExtDir)
-    copyInFile(vscodeExtInDir, vscodeExtDir, "tasks", target)
-    copyInFile(vscodeExtInDir, vscodeExtDir, "c_cpp_properties", target)
-    copyInFile(vscodeExtInDir, vscodeExtDir, "extensions", target)
-    copyInFile(vscodeExtInDir, vscodeExtDir, "launch", target)
+        # 创建工程
+        templateDir = os.path.join(examplesDir, template)
+        shutil.copytree(templateDir, projectDir)
+
+    try:
+        # 在新工程中创建.vscode目录
+        vscodeExtInDir = os.path.join(targetDir, ".project", "vscode")
+        vscodeExtDir = os.path.join(projectDir, ".vscode")
+        os.mkdir(vscodeExtDir)
+        copyInFile(vscodeExtInDir, vscodeExtDir, "tasks", target)
+        copyInFile(vscodeExtInDir, vscodeExtDir, "c_cpp_properties", target)
+        copyInFile(vscodeExtInDir, vscodeExtDir, "extensions", target)
+        copyInFile(vscodeExtInDir, vscodeExtDir, "launch", target)
+
+        # 拷贝工程文件
+        projectInDir = os.path.join(targetDir, ".project")
+        shutil.copy(os.path.join(projectInDir,".clang-format"), projectDir)
+        shutil.copy(os.path.join(projectInDir,".editorconfig"), projectDir)
+        shutil.copy(os.path.join(projectInDir,".gitignore"), projectDir)
+        shutil.copy(os.path.join(projectInDir,"CMakeLists.txt"), projectDir)
+        shutil.copy(os.path.join(projectInDir,"README.md"), projectDir)
+    except:
+        pass
 
     # 完成
     print("Project [%s] generated. Use VSCode to open [%s] subdirectory." % (project_name,project_name))
@@ -416,6 +444,7 @@ ACTIONS = {
     "debug":                 (gdbserver,    ["all"], []),
     "monitor":               (monitor,      [], ["flash"]),
     "new":                   (new_project,  [], []),
+    "softreset":             (reset_target,  [], []),
 }
 
 
