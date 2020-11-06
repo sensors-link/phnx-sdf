@@ -27,5 +27,14 @@ begin
         Exec('cmd.exe', ExpandConstant('/C ' + vscodePath + '--install-extension {app}\temp\zhwu95.riscv-0.0.8.vsix'),
         '', SW_SHOW, ewWaitUntilTerminated, ResultCode);
     end;
+    SaveStringToFile(ExpandConstant('{app}\sdf.cmd'), pythonPath + ' %PHNX_SDF%\tools\sdf.py %*', False);
+  end;
+end;
+
+<event('CurUninstallStepChanged')>
+procedure uninstallExt(CurUninstallStep: TUninstallStep);
+begin
+  if CurUninstallStep = usUninstall then begin
+    DeleteFile(ExpandConstant('{app}\sdf.cmd'));
   end;
 end;

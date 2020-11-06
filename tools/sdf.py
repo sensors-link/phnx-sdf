@@ -388,7 +388,7 @@ def new_project(action, args):
     else:
         examples = []
         for root, dirs, files in os.walk(examplesDir, topdown=False):
-            if 'main.c' in files:
+            if ('main.c' in files) or ('app.c' in files):
                 root[len(examplesDir):]
                 examples.append(root[len(examplesDir)+1:])
 
@@ -418,6 +418,7 @@ def new_project(action, args):
         shutil.copy(os.path.join(projectInDir,".gitignore"), projectDir)
         shutil.copy(os.path.join(projectInDir,"CMakeLists.txt"), projectDir)
         shutil.copy(os.path.join(projectInDir,"README.md"), projectDir)
+        shutil.copy(os.path.join(targetDir,"openocd.cfg"), projectDir)
     except:
         pass
 

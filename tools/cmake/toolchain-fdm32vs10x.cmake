@@ -42,9 +42,6 @@ foreach(elm ${cflags_list})
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${elm}")
 endforeach()
 
-# set(CMAKE_ASM_FLAGS
-#     "${CPU_FLAGS} -Os -ggdb  -ffunction-sections -fdata-sections"
-# )
 set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_C_FLAGS} -nostartfiles -Wl,--gc-sections --specs=nano.specs")
 

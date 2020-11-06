@@ -66,6 +66,8 @@ macro(project name)
     foreach(elm ${ALL_COMPONENTS_ADDED})
         target_include_directories(${elm} PRIVATE "${PROJECT_PATH}/include"
             ${COMPONENT_${elm}_PRIV_INCLUDE} ${COMPONENT_${elm}_INCLUDE})
+        target_include_directories(${elm} PRIVATE "${PROJECT_PATH}"
+            ${COMPONENT_${elm}_PRIV_INCLUDE} ${COMPONENT_${elm}_INCLUDE})
         set(COMPONENT_${elm}_ALL_REQUIRES "" CACHE STRING "COMPONENT_${elm}_ALL_REQUIRES" FORCE)
         set_component_all_requires(${elm} ${elm})
         foreach(elm1 ${COMPONENT_${elm}_ALL_REQUIRES})
@@ -107,6 +109,7 @@ macro(project name)
 
     # 1. 头文件目录
     target_include_directories(${PROJECT_EXECUTABLE} PRIVATE "include")
+    target_include_directories(${PROJECT_EXECUTABLE} PRIVATE ".")
     foreach(elm ${ALL_COMPONENTS_ADDED})
         target_include_directories(${PROJECT_EXECUTABLE} PRIVATE ${COMPONENT_${elm}_INCLUDE})
     endforeach()
