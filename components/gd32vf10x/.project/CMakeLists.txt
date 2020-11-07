@@ -1,6 +1,6 @@
 # 不要修改此部分
 cmake_minimum_required(VERSION 3.5)
-set(TARGET gd32vf10x)
+set(TARGET fdm32vs10x)
 include("$ENV{PHNX_SDF}/tools/cmake/project.cmake")
 
 # 为工程添加文件，
@@ -13,5 +13,16 @@ file(GLOB_RECURSE PROJECT_SRCS "*.c") # 通配文件，递归
 # 编译宏 -D XXX列表
 set(PROJECT_DEFINITIONS "_DEBUG" "USE_STDPERIPH_DRIVER" "HXTAL_VALUE=8000000")
 
+# 其他高级用法
+# PROJECT_REQUIRES: 本工程依赖的通用组件
+# set(PROJECT_REQUIRES "")
+# PROJECT_INCLUDEDIRS: 本工程依赖的通用组件
+# set(PROJECT_INCLUDEDIRS "")
+# PROJECT_LDSCRIPT: 自定义LDSCRIPT
+# set(PROJECT_LDSCRIPT "")
+# CMAKE_C_FLAGS: 特别的编译参数CFLAGS
+# set(CMAKE_C_FLAGS "")
+
 # 最后调用project
 project(app)
+

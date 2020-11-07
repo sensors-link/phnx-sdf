@@ -34,10 +34,6 @@ macro(project name)
     if(PROJECT_DEFINITIONS)
         spaces2list(PROJECT_DEFINITIONS)
         add_compile_definitions(${PROJECT_DEFINITIONS})
-        list(FIND PROJECT_DEFINITIONS "_DEBUG" found)
-        if (NOT "${found}" STREQUAL "-1" )
-            set(WITH_DEBUG "1")
-        endif()
     endif()
 
     __project(${name} C ASM)
@@ -64,9 +60,7 @@ macro(project name)
 
     # 为组件添加所有依赖组件的头文件目录
     foreach(elm ${ALL_COMPONENTS_ADDED})
-        target_include_directories(${elm} PRIVATE "${PROJECT_PATH}/include"
-            ${COMPONENT_${elm}_PRIV_INCLUDE} ${COMPONENT_${elm}_INCLUDE})
-        target_include_directories(${elm} PRIVATE "${PROJECT_PATH}"
+        target_include_directories(${elm} PRIVATE "${PROJECT_PATH}" "${PROJECT_PATH}/include"
             ${COMPONENT_${elm}_PRIV_INCLUDE} ${COMPONENT_${elm}_INCLUDE})
         set(COMPONENT_${elm}_ALL_REQUIRES "" CACHE STRING "COMPONENT_${elm}_ALL_REQUIRES" FORCE)
         set_component_all_requires(${elm} ${elm})
@@ -76,15 +70,7 @@ macro(project name)
         endforeach()
     endforeach()
 
-    set(EXTRA_SRCS "${EXTRA_SRCS} ${COMPONENT_${elm}_EXTRA_SRCS}")
-    foreach(elm ${ALL_COMPONENTS_ADDED})
-        if(COMPONENT_${elm}_EXTRA_SRCS)
-            # set(EXTRA_SRCS "${EXTRA_SRCS} ${COMPONENT_${elm}_EXTRA_SRCS}")
-            list(APPEND EXTRA_SRCS ${COMPONENT_${elm}_EXTRA_SRCS} )
-        endif()
-    endforeach()
     # 设置工程主文件编译
-
     set(PROJECT_EXECUTABLE ${CMAKE_PROJECT_NAME}.elf)
 
     set(REAL_PROJECT_SRCS "")
@@ -92,7 +78,6 @@ macro(project name)
         spaces2list(PROJECT_SRCS)
         foreach(elm ${ALL_COMPONENTS_ADDED})
             if(COMPONENT_${elm}_EXTRA_SRCS)
-                # set(EXTRA_SRCS "${EXTRA_SRCS} ${COMPONENT_${elm}_EXTRA_SRCS}")
                 list(APPEND PROJECT_SRCS ${COMPONENT_${elm}_EXTRA_SRCS} )
             endif()
         endforeach()
@@ -108,8 +93,11 @@ macro(project name)
     endif()
 
     # 1. 头文件目录
-    target_include_directories(${PROJECT_EXECUTABLE} PRIVATE "include")
     target_include_directories(${PROJECT_EXECUTABLE} PRIVATE ".")
+    if(PROJECT_INCLUDEDIRS)
+        spaces2list(PROJECT_INCLUDEDIRS)
+        target_include_directories(${PROJECT_EXECUTABLE} PRIVATE ${PROJECT_INCLUDEDIRS})
+    endif()
     foreach(elm ${ALL_COMPONENTS_ADDED})
         target_include_directories(${PROJECT_EXECUTABLE} PRIVATE ${COMPONENT_${elm}_INCLUDE})
     endforeach()
@@ -125,6 +113,11 @@ macro(project name)
     # 3. 库文件
     target_link_directories(${PROJECT_EXECUTABLE} PUBLIC "${LIBRARY_OUTPUT_PATH}")
     target_link_libraries(${PROJECT_EXECUTABLE} "-Wl,--start-group" ${PROJECT_REQUIRES} "-Wl,--end-group")
+    if(PROJECT_LDSCRIPT)
+        target_link_directories(${PROJECT_EXECUTABLE} PUBLIC ".")
+        target_link_libraries(${PROJECT_EXECUTABLE} "-T ${PROJECT_LDSCRIPT}")
+    endif()
+
 
     # 4. 将ELF文件转成BIN
     set(PROJECT_BIN ${CMAKE_PROJECT_NAME}.bin)

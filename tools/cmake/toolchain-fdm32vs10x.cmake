@@ -48,8 +48,6 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_C_FLAGS} -nostartfiles -Wl,--gc-sections --s
 set(CMAKE_C_FLAGS_RELEASE "-Os")
 set(CMAKE_C_FLAGS_DEBUG "-O2 -ggdb")
 
-if(CMAKE_BUILD_TYPE)
-    # set(CMAKE_BUILD_TYPE "Debug")
-else()
+if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Debug")
 endif()
