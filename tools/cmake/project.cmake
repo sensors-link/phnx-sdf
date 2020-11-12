@@ -60,7 +60,7 @@ macro(project name)
 
     # 为组件添加所有依赖组件的头文件目录
     foreach(elm ${ALL_COMPONENTS_ADDED})
-        target_include_directories(${elm} PRIVATE "${PROJECT_PATH}" "${PROJECT_PATH}/include"
+        target_include_directories(${elm} PRIVATE "${PROJECT_PATH}" "${PROJECT_INCLUDEDIRS}"
             ${COMPONENT_${elm}_PRIV_INCLUDE} ${COMPONENT_${elm}_INCLUDE})
         set(COMPONENT_${elm}_ALL_REQUIRES "" CACHE STRING "COMPONENT_${elm}_ALL_REQUIRES" FORCE)
         set_component_all_requires(${elm} ${elm})

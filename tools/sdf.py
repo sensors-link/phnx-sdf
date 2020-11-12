@@ -413,12 +413,18 @@ def new_project(action, args):
 
         # 拷贝工程文件
         projectInDir = os.path.join(targetDir, ".project")
-        shutil.copy(os.path.join(projectInDir,".clang-format"), projectDir)
-        shutil.copy(os.path.join(projectInDir,".editorconfig"), projectDir)
-        shutil.copy(os.path.join(projectInDir,".gitignore"), projectDir)
-        shutil.copy(os.path.join(projectInDir,"CMakeLists.txt"), projectDir)
-        shutil.copy(os.path.join(projectInDir,"README.md"), projectDir)
-        shutil.copy(os.path.join(targetDir,"openocd.cfg"), projectDir)
+        if not os.path.exists(os.path.join(projectDir,".clang-format")):
+            shutil.copy(os.path.join(projectInDir,".clang-format"), projectDir)
+        if not os.path.exists(os.path.join(projectDir,".editorconfig")):
+            shutil.copy(os.path.join(projectInDir,".editorconfig"), projectDir)
+        if not os.path.exists(os.path.join(projectDir,".gitignore")):
+            shutil.copy(os.path.join(projectInDir,".gitignore"), projectDir)
+        if not os.path.exists(os.path.join(projectDir,"CMakeLists.txt")):
+            shutil.copy(os.path.join(projectInDir,"CMakeLists.txt"), projectDir)
+        if not os.path.exists(os.path.join(projectDir,"README.md")):
+            shutil.copy(os.path.join(projectInDir,"README.md"), projectDir)
+        if not os.path.exists(os.path.join(projectDir,"openocd.cfg")):
+            shutil.copy(os.path.join(targetDir,"openocd.cfg"), projectDir)
     except:
         pass
 
