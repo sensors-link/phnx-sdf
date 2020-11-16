@@ -11,7 +11,6 @@ find_program(CMAKE_ASM_COMPILER NAMES ${COMPILER_PREFIX}-gcc)
 find_program(CMAKE_OBJCOPY NAMES ${COMPILER_PREFIX}-objcopy)
 find_program(CMAKE_SIZE NAMES ${COMPILER_PREFIX}-size)
 find_program(CMAKE_DEBUGGER NAMES ${COMPILER_PREFIX}-gdb)
-find_program(CMAKE_QEMU NAMES qemu-system-riscv32)
 
 # Compilers flags
 set(cflags_list

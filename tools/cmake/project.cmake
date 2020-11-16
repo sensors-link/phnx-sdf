@@ -30,6 +30,7 @@ macro(project name)
         message(FATAL_ERROR "Please set TARGET to any supported platform in your CMakeList.txt file!")
     endif()
     include(toolchain-${TARGET})
+    include(cppcheck)
 
     if(PROJECT_DEFINITIONS)
         spaces2list(PROJECT_DEFINITIONS)

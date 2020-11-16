@@ -405,7 +405,8 @@ def new_project(action, args):
         # 在新工程中创建.vscode目录
         vscodeExtInDir = os.path.join(targetDir, ".project", "vscode")
         vscodeExtDir = os.path.join(projectDir, ".vscode")
-        os.mkdir(vscodeExtDir)
+        if not os.path.exists(vscodeExtDir):
+            os.mkdir(vscodeExtDir)
         copyInFile(vscodeExtInDir, vscodeExtDir, "tasks", target)
         copyInFile(vscodeExtInDir, vscodeExtDir, "c_cpp_properties", target)
         copyInFile(vscodeExtInDir, vscodeExtDir, "extensions", target)
