@@ -5,6 +5,7 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "@PHNX_SDF@/components/@TARGET@/**"
+                "@PHNX_SDF@/components/freertos/**"
             ],
             "defines": [
                 "_DEBUG",
@@ -15,7 +16,7 @@
                 "limitSymbolsToIncludedHeaders": true,
                 "path": [
                     "@PHNX_SDF@/components/@TARGET@/**",
-                    ""
+                    "@PHNX_SDF@/components/freertos/**"
                 ]
             },
             "compilerPath": "@CMAKE_C_COMPILER@",
