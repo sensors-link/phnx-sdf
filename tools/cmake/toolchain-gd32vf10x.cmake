@@ -45,7 +45,7 @@ endforeach()
 set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_C_FLAGS} -nostartfiles -Wl,--gc-sections --specs=nano.specs")
 
-set(CMAKE_C_FLAGS_RELEASE "-Os")
+set(CMAKE_C_FLAGS_RELEASE "-O2")
 set(CMAKE_C_FLAGS_DEBUG "-O2 -ggdb")
 
 if(CMAKE_BUILD_TYPE)
