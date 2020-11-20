@@ -377,7 +377,7 @@ def new_project(action, args):
     print()
     # 选择目标环境和项目模板
     project_name = input("Input a name for the new project: ")
-    target = select("Target for the project : ", ["fdm32vs10x","gd32vf10x"])
+    target = select("Target for the project : ", ["fdv32s30x","gd32vf10x"])
     projectDir = os.path.join(".", project_name)
     targetDir = os.path.join(os.environ["PHNX_SDF"], "components", target)
     examplesDir = os.path.join(os.environ["PHNX_SDF"], "examples", target)

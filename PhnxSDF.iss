@@ -38,8 +38,8 @@ Name: "chinese"; MessagesFile: "compiler:Languages/Chinese.isl"
 [Files]
 Source: "inno\vscodeExt\*"; DestDir: "{app}\temp"; Flags: ignoreversion deleteafterinstall
 Source: "BuildTools\*"; DestDir: "{app}\BuildTools"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "components\fdm32vs10x\*"; DestDir: "{app}\components\fdm32vs10x"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "examples\fdm32vs10x\*"; DestDir: "{app}\examples\fdm32vs10x"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "components\*"; DestDir: "{app}\components"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "examples\*"; DestDir: "{app}\examples"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "docs\*"; DestDir: "{app}\docs"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "tools\*"; DestDir: "{app}\tools"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "README.md"; DestDir: "{app}"; Flags: ignoreversion
