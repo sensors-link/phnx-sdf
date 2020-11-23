@@ -39,7 +39,7 @@ macro(project name)
         add_compile_definitions(${PROJECT_DEFINITIONS})
     endif()
 
-    __project(${name} C CXX ASM)
+    __project(${name} C ASM)
     set(PROJECT_PATH "${CMAKE_SOURCE_DIR}")
     set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
