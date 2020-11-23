@@ -46,7 +46,7 @@ set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_C_FLAGS} -nostartfiles -Wl,--gc-sections --specs=nano.specs")
 
 set(CMAKE_C_FLAGS_RELEASE "-O2")
-set(CMAKE_C_FLAGS_DEBUG "-O2 -ggdb")
+set(CMAKE_C_FLAGS_DEBUG "-O2")
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Debug")
