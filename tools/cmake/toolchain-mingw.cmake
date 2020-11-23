@@ -2,7 +2,7 @@
 include(CMakeForceCompiler)
 set(CMAKE_SYSTEM_NAME Generic)
 
-set(COMPILER_PREFIX "arm-none-eabi-")
+# set(COMPILER_PREFIX "arm-none-eabi-")
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
 # Compilers and utilities
