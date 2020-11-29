@@ -28,6 +28,7 @@ begin
         '', SW_SHOW, ewWaitUntilTerminated, ResultCode);
     end;
     SaveStringToFile(ExpandConstant('{app}\sdf.cmd'), pythonPath + ' %PHNX_SDF%\tools\sdf.py %*', False);
+    SaveStringToFile(ExpandConstant('{app}\sdfqc.cmd'), pythonPath + ' %PHNX_SDF%\tools\sdfqc.py %*', False);
   end;
 end;
 
@@ -36,5 +37,6 @@ procedure uninstallExt(CurUninstallStep: TUninstallStep);
 begin
   if CurUninstallStep = usUninstall then begin
     DeleteFile(ExpandConstant('{app}\sdf.cmd'));
+    DeleteFile(ExpandConstant('{app}\sdfqc.cmd'));
   end;
 end;

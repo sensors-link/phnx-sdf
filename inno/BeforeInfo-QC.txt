@@ -1,0 +1,15 @@
+Phoenix SDF (Sensors Development Framwork) 是泛海数据Phoenix系列传感器SoC的开发框架。
+
+Phoenix SDF - QC 是 Phoenix SDF的子集， 用于对C/C++/ASM代码进行质量检查
+
+Phoenix SDF QC安装依赖
+- Phoenix SDF QC需要Python3的支持，请先安装Python3.7以上版本。
+- 如需使用Phoenix SDF QC单元测试功能，建议安装GCC for MINGW64 工具链。
+
+Phoenix SDF 提供
+- 代码格式化工具clang-format
+- 代码静态检查工具cppcheck
+- 代码统计工具cloc
+- 代码覆盖测试工具gconvr
+
+Phoenix SDF QC提供sdfqc命令行工具一键调用上述工具，为项目提供QC报告。
