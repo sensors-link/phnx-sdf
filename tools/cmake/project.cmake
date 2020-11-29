@@ -31,7 +31,6 @@ macro(project name)
     endif()
     # include 工具链定义
     include(toolchain-${TARGET})
-    include(cppcheck)
 
     # 工程指定的编译参数定义
     if(PROJECT_DEFINITIONS)
@@ -39,7 +38,11 @@ macro(project name)
         add_compile_definitions(${PROJECT_DEFINITIONS})
     endif()
 
-    __project(${name} C ASM)
+    if (TARGET_ENABLE_CXX)
+        __project(${name} C CXX ASM)
+    else()
+        __project(${name} C ASM)
+    endif()
     set(PROJECT_PATH "${CMAKE_SOURCE_DIR}")
     set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
