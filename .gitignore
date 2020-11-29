@@ -3,6 +3,8 @@
 *.exe
 BuildTools
 riscv-gcc8
+arm-gcc9
+mingw64-gcc8
 GPATH
 GTAGS
 GRTAGS
